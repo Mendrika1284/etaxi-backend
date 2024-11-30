@@ -4,9 +4,10 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { DriversModule } from './drivers/drivers.module';
 import { ClientModule } from './client/client.module';
+import { RideModule } from './ride/ride.module';
 
 @Module({
-  imports: [UsersModule, DriversModule, ClientModule],
+  imports: [UsersModule, DriversModule, ClientModule, RideModule],
   controllers: [AppController],
   providers: [AppService],
 })
