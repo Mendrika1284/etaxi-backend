@@ -4,7 +4,7 @@ import { HydratedDocument } from 'mongoose';
 export type NotificationDocument = HydratedDocument<Notification>;
 
 @Schema({ collection: 'Notifications' })
-export class Notification {
+export class Notif {
   @Prop({ required: true })
   userId: string;
 
@@ -18,4 +18,4 @@ export class Notification {
   createdAt: Date;
 }
 
-export const NotificationSchema = SchemaFactory.createForClass(Notification);
+export const NotifSchema = SchemaFactory.createForClass(Notif);
