@@ -11,6 +11,12 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<Users> {
+    const existingUser = await this.userModel
+      .findOne({ email: createUserDto.email })
+      .exec();
+    if (existingUser) {
+      throw new NotFoundException('Cet email est déjà utilisé.');
+    }
     const createdUser = new this.userModel({
       ...createUserDto,
       createdAt: new Date(),
