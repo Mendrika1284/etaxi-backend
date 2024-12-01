@@ -23,7 +23,6 @@ export class CreateUserDto {
   role: Role;
 
   @IsString()
-  @IsNotEmpty()
   phone?: string;
 
   @IsOptional()
