@@ -24,6 +24,14 @@ export class UsersController {
     return res.status(HttpStatus.CREATED).json(user);
   }
 
+  @Post('login')
+  async login(
+    @Body() loginDTO: { email: string; password: string },
+  ): Promise<{ role: string }> {
+    const { email, password } = loginDTO;
+    return this.usersService.login(email, password);
+  }
+
   @Get()
   async findAll(@Res() res: Response) {
     const users = await this.usersService.findAll();
