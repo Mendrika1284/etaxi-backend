@@ -9,10 +9,13 @@ import { Users } from './users.schema';
 import { CreateUserDto } from './dto/create-users.dto';
 import { UpdateUserDto } from './dto/update-users.dto';
 import * as bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
+import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(Users.name) private readonly userModel: Model<Users>,
+    private readonly configService: ConfigService,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<Users> {
@@ -33,7 +36,7 @@ export class UsersService {
     return createdUser.save();
   }
 
-  async login(email: string, password: string): Promise<{ role: string }> {
+  async login(email: string, password: string): Promise<{ token: string }> {
     const user = await this.userModel.findOne({ email }).exec();
     if (!user) {
       throw new NotFoundException("Cet email n'est pas associé à un compte");
@@ -43,7 +46,19 @@ export class UsersService {
       throw new UnauthorizedException('Email ou mot de passe incorrect');
     }
 
-    return { role: user.role };
+    const payload = {
+      email: user.email,
+      role: user.role,
+      id: user._id,
+    };
+
+    const secret = this.configService.get<string>('JWT_SECRET');
+
+    const token = jwt.sign(payload, secret, {
+      expiresIn: '12h',
+    });
+
+    return { token };
   }
 
   async findAll(): Promise<Users[]> {

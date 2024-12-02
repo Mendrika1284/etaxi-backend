@@ -27,7 +27,7 @@ export class UsersController {
   @Post('login')
   async login(
     @Body() loginDTO: { email: string; password: string },
-  ): Promise<{ role: string }> {
+  ): Promise<{ token: string }> {
     const { email, password } = loginDTO;
     return this.usersService.login(email, password);
   }
